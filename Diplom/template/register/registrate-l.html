@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {            display: flex;
+            align-items: center;            justify-content: center;
+            height: 100vh;            margin: 0;
+            background-color: ghostwhite;
+        }        .form-container {
+            width: 400px;        }
+    </style></head>
+<body>
+<div class="form-container">
+    <h2 class="text-center text-black mb-4">Регистрация</h2>
+    <form method="post">
+        {% csrf_token %}
+    <div class="form-group">
+         {{ form.username }}
+         {{ form.first_name }}
+         {{ form.last_name }}
+         {{ form.password1 }}
+         {{ form.password2 }}
+<!--         {{ form.captcha }}-->
+        <button type="submit" class="btn btn-success btn-block mt-2">Зарегистрироваться</button>
+        <p class="text-black">Если уже есть аккаунт, то жмите</p>
+        <a href="{% url 'login-l' %}" class="btn btn-success btn-block">Войти</a>
+    </div>
+    </form>
+</div>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body></html>
