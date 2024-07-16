@@ -40,6 +40,7 @@ SESSION_COOKIE_SECURE = True
 
 INSTALLED_APPS = [
     'main',
+    'rest_framework',
     'django_recaptcha',
     'django.contrib.admin',
     'django.contrib.auth',

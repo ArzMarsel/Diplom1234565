@@ -5,6 +5,44 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django_recaptcha.fields import ReCaptchaField
 from .forms import UserCreation, LoginForm, PaymentForm, ConnectForm
 from .models import Dish, Connect, DishImage
+from .bot import send_telegram_message
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.utils import timezone
+from asgiref.sync import async_to_sync
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.http import JsonResponse
+from .models import Connect
+import json
+
+@require_http_methods(["POST"])
+def update_connect_status(request, connect_id):
+    try:
+        data = json.loads(request.body)
+        new_status = data.get('status')
+        connect = Connect.objects.get(id=connect_id)
+        connect.status = new_status
+        connect.save()
+        return JsonResponse({'message': 'Статус успешно обновлён!'}, status=200)
+    except Connect.DoesNotExist:
+        return JsonResponse({'error': 'Connect не найден.'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+def accepted_connects_view(request):
+    # Получаем все Connect объекты со статусом "accepted"
+    accepted_connects = Connect.objects.filter(status='accepted').values('user__username', 'dish__name', 'quantity')
+    # Преобразуем queryset в список словарей
+    connect_list = list(accepted_connects)
+    return JsonResponse(connect_list, safe=False)
+
+@receiver(post_save, sender=Connect)
+def send_notification(sender, instance, **kwargs):
+    if instance.status == 'accepted':
+        message = f"Заказ {instance.dish.name} принят!"
+        async_to_sync(send_telegram_message)(chat_id='5139247587', text=message)
 
 
 def user_login(request):
@@ -292,7 +330,7 @@ def connect_to_saled_l(request):
 @login_required(login_url='login')
 def pay(request, pk):
     dish = get_object_or_404(Dish, pk=pk)
-    connect = get_object_or_404(Connect, user=request.user, dish=dish)
+    connect = get_object_or_404(Connect, user=request.user, dish=dish, mark=True)
     if request.method == 'POST':
         form = PaymentForm(request.POST)
         if form.is_valid():
@@ -314,7 +352,7 @@ def pay(request, pk):
 @login_required(login_url='login-l')
 def pay_l(request, pk):
     dish = get_object_or_404(Dish, pk=pk)
-    connect = get_object_or_404(Connect, user=request.user, dish=dish)
+    connect = get_object_or_404(Connect, user=request.user, dish=dish, mark=True)
     if request.method == 'POST':
         form = PaymentForm(request.POST)
         if form.is_valid():
