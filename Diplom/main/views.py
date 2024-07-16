@@ -2,6 +2,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.db import Error
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from django_recaptcha.fields import ReCaptchaField
 from .forms import UserCreation, LoginForm, PaymentForm, ConnectForm
 from .models import Dish, Connect, DishImage
@@ -15,7 +16,7 @@ from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
 from .models import Connect
 import json
-
+@csrf_exempt
 @require_http_methods(["POST"])
 def update_connect_status(request, connect_id):
     try:
@@ -32,11 +33,16 @@ def update_connect_status(request, connect_id):
 
 
 def accepted_connects_view(request):
-    # Получаем все Connect объекты со статусом "accepted"
-    accepted_connects = Connect.objects.filter(status='accepted').values('user__username', 'dish__name', 'quantity')
-    # Преобразуем queryset в список словарей
+    accepted_connects = Connect.objects.filter(status='accepted').values('id', 'user__username', 'dish__name', 'quantity')
     connect_list = list(accepted_connects)
     return JsonResponse(connect_list, safe=False)
+
+def cooking_connects_view(request):
+    accepted_connects = Connect.objects.filter(status='cooking').values('id', 'user__username', 'dish__name', 'quantity')
+    connect_list = list(accepted_connects)
+    return JsonResponse(connect_list, safe=False)
+
+
 
 @receiver(post_save, sender=Connect)
 def send_notification(sender, instance, **kwargs):

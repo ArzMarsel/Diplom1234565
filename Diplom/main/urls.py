@@ -45,5 +45,6 @@ urlpatterns = [
     path('saled/', views.connect_to_saled, name='saled'),
     path('saled-l/', views.connect_to_saled_l, name='saled-l'),
     path('api/accepted-connects/', views.accepted_connects_view, name='accepted-connects'),
+    path('api/cooking-connects/', views.cooking_connects_view, name='cooking-connects'),
     path('api/update-connect-status/<int:connect_id>/', views.update_connect_status, name='update-connect-status'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
