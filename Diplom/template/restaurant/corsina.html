@@ -63,12 +63,12 @@
             <div class="col-md-4">
                 <div class="card bg-dark mb-5 mt-3 border-0 h-100 d-flex align-items-stretch text-light">
                     {% if image_url %}
-
             <img src="{{ image_url }}" class="card-img-top" alt="{{ dish.name }}" style="width: 100%">
         {% endif %}
                     <div class="card-body">
             <h5 class="card-title"><strong>{{ dish.name }}</strong></h5>
             <p class="card-text">{{ dish.info }}</p>
+                        <p class="card-text">Кол-во: {{ dish.quantity }}</p>
                         {% if cors.status == "done" %}
                         <button class="btn btn-primary" style="width: 100%" disabled>Заказано</button>
                         {% elif cors.status == "accepted" %}

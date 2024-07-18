@@ -68,6 +68,8 @@
                     <div class="card-body">
                         <h5 class="card-title text-black"><strong>{{ dish.name }}</strong></h5>
             <p class="card-text text-black">{{ dish.info }}</p>
+
+                        <p class="card-text text-black">Кол-во: {{ dish.quantity }}</p>
                         {% if cors.status == "done" %}
                         <button class="btn-success" style="width: 100%" disabled>Заказано</button>
                         {% elif cors.status == "accepted" %}

@@ -403,13 +403,21 @@ def quan(request, pk):
         form.status = 'done'
         if form.is_valid():
             if form.cleaned_data['quantity'] <= dish.quantity:
-                connect = form.save(commit=False)
-                connect.user = request.user
-                connect.mark = True
-                connect.status = 'done'
-                connect.dish = dish
-                connect.save()
-                return redirect('dishes')
+                connect = Connect.objects.filter(user=request.user, dish=dish, mark=True).first()
+                if connect:
+                    connect.mark = True
+                    connect.status = 'done'
+                    connect.quantity += form.cleaned_data['quantity']
+                    connect.save()
+                    return redirect('dishes')
+                else:
+                    connect = form.save(commit=False)
+                    connect.user = request.user
+                    connect.mark = True
+                    connect.status = 'done'
+                    connect.dish = dish
+                    connect.save()
+                    return redirect('dishes')
     else:
         form = ConnectForm()
     return render(request, 'restaurant/quan.html', {"form": form})
@@ -425,13 +433,21 @@ def quan_l(request, pk):
         form.status = 'done'
         if form.is_valid():
             if form.cleaned_data['quantity'] <= dish.quantity:
-                connect = form.save(commit=False)
-                connect.user = request.user
-                connect.mark = True
-                connect.status = 'done'
-                connect.dish = dish
-                connect.save()
-                return redirect('dishes-l')
+                connect = Connect.objects.filter(user=request.user, dish=dish, mark=True).first()
+                if connect:
+                    connect.mark = True
+                    connect.status = 'done'
+                    connect.quantity += form.cleaned_data['quantity']
+                    connect.save()
+                    return redirect('dishes-l')
+                else:
+                    connect = form.save(commit=False)
+                    connect.user = request.user
+                    connect.mark = True
+                    connect.status = 'done'
+                    connect.dish = dish
+                    connect.save()
+                    return redirect('dishes-l')
     else:
         form = ConnectForm()
     return render(request, 'restaurant/quan-l.html', {"form": form})

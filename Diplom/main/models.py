@@ -3,12 +3,14 @@ from django.core.validators import MinLengthValidator, MinValueValidator, MaxLen
 from django.db import models
 from django.conf import settings
 
+
 class TelegramProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     telegram_id = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return f"{self.user.username}'s telegram profile"
+
 
 class Dish(models.Model):
     Type_list = (
