@@ -77,23 +77,41 @@ class LoginForm(forms.Form):
         fields = ['username', 'password1']
 
 
-class PaymentForm(forms.ModelForm):
-    card_number = forms.IntegerField(
-        validators=[MaxLengthValidator(16), MinLengthValidator(16)],
+from django import forms
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
+from django.contrib.auth.models import User
 
-        widget=forms.NumberInput(
+def validate_card_number(value):
+    if not value.isdigit() or len(value) != 16:
+        raise ValidationError("Номер карты должен состоять из 16 цифр.")
+
+def validate_cvc(value):
+    if not value.isdigit() or len(value) != 3:
+        raise ValidationError("CVC код должен состоять из 3 цифр.")
+
+class PaymentForm(forms.ModelForm):
+    card_number = forms.CharField(
+        validators=[validate_card_number],
+        widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Номер карты'
+                'placeholder': 'Номер карты',
+                'autocomplete': 'cc-number',
+                'maxlength': '16',
+                'minlength': '16',
             }
         )
     )
-    cvc = forms.IntegerField(
-        validators=[MinLengthValidator(3), MinLengthValidator(3)],
-        widget=forms.NumberInput(
+    cvc = forms.CharField(
+        validators=[validate_cvc],
+        widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'CVC'
+                'placeholder': 'CVC',
+                'autocomplete': 'cc-csc',
+                'maxlength': '3',
+                'minlength': '3',
             }
         )
     )
@@ -101,12 +119,6 @@ class PaymentForm(forms.ModelForm):
     class Meta:
         model = Payment
         fields = ['card_number', 'cvc']
-        widgets = {
-            'card_number': forms.TextInput(attrs={'placeholder': 'Номер карты', 'autocomplete': 'cc-number'}),
-            'cvc': forms.TextInput(attrs={'placeholder': 'CVC', 'autocomplete': 'cc-csc'}),
-        }
-
-
 class ConnectForm(forms.ModelForm):
     quantity = forms.IntegerField(
         widget=forms.NumberInput(
