@@ -51,7 +51,7 @@ class UserCreation(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'password1', 'password2', ]
+        fields = ['username', 'first_name', 'last_name', 'password1', 'password2', 'captcha']
 
 
 class LoginForm(forms.Form):
@@ -71,10 +71,11 @@ class LoginForm(forms.Form):
             }
         )
     )
+    captcha = ReCaptchaField()
 
     class Meta:
         model = User
-        fields = ['username', 'password1']
+        fields = ['username', 'password1', 'captcha']
 
 
 class PaymentForm(forms.ModelForm):
