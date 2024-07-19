@@ -90,9 +90,9 @@
                         {% if dish.quantity <= 0 %}
                         <button class="btn btn-success" disabled>Нет в наличии</button>
                         {% elif dish.kind == "alco" %}
-            <a href="{% url 'is18' dish.id %}" class="btn btn-success">Подробнее</a>
+            <a href="{% url 'is18-l' dish.id %}" class="btn btn-success">Подробнее</a>
                         {% else %}
-            <a href="{% url 'more' dish.id %}" class="btn btn-success">Подробнее</a>
+            <a href="{% url 'more-l' dish.id %}" class="btn btn-success">Подробнее</a>
                         {% endif %}
         </div>
                 </div>

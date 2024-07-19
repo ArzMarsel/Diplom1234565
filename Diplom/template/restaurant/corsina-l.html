@@ -83,7 +83,7 @@
 <button class="btn btn-success" style="width: 100%" disabled>Oжидайте заказ...</button>
                         {% endif %}
                         {% if cors.mark == True %}
-        <a class="btn btn btn-success mt-2" style="width: 100%" href="{% url 'payment' dish.id %}">Оплатить</a>
+        <a class="btn btn btn-success mt-2" style="width: 100%" href="{% url 'payment-l' dish.id %}">Оплатить</a>
 
                         {% else %}
                         <button class="btn btn btn-success mt-2" style="width: 100%" disabled>Оплачено</button>
