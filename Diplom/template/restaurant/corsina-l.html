@@ -70,7 +70,7 @@
                         <h5 class="card-title text-black"><strong>{{ dish.name }}</strong></h5>
             <p class="card-text text-black">{{ dish.info }}</p>
 
-                        <p class="card-text text-black">Кол-во: {{ dish.quantity }}</p>
+                        <p class="card-text text-black">Кол-во: {{ cors.quantity }}</p>
                         {% if cors.status == "done" %}
                         <button class="btn btn btn-success" style="width: 100%" disabled>Заказано</button>
                         {% elif cors.status == "accepted" %}
@@ -83,7 +83,8 @@
 <button class="btn btn-success" style="width: 100%" disabled>Oжидайте заказ...</button>
                         {% endif %}
                         {% if cors.mark == True %}
-                        <a class="btn btn btn-success mt-2" style="width: 100%" href="{% url 'payment' dish.id %}">Оплатить</a>
+        <a class="btn btn btn-success mt-2" style="width: 100%" href="{% url 'payment' dish.id %}">Оплатить</a>
+
                         {% else %}
                         <button class="btn btn btn-success mt-2" style="width: 100%" disabled>Оплачено</button>
                         {% endif %}

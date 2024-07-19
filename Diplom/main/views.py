@@ -408,6 +408,8 @@ def quan(request, pk):
                     connect.mark = True
                     connect.status = 'done'
                     connect.quantity += form.cleaned_data['quantity']
+                    dish.quantity -= form.cleaned_data['quantity']
+                    dish.save()
                     connect.save()
                     return redirect('dishes')
                 else:
@@ -416,6 +418,8 @@ def quan(request, pk):
                     connect.mark = True
                     connect.status = 'done'
                     connect.dish = dish
+                    dish.quantity -= form.cleaned_data['quantity']
+                    dish.save()
                     connect.save()
                     return redirect('dishes')
     else:
@@ -438,6 +442,8 @@ def quan_l(request, pk):
                     connect.mark = True
                     connect.status = 'done'
                     connect.quantity += form.cleaned_data['quantity']
+                    dish.quantity -= form.cleaned_data['quantity']
+                    dish.save()
                     connect.save()
                     return redirect('dishes-l')
                 else:
@@ -446,6 +452,8 @@ def quan_l(request, pk):
                     connect.mark = True
                     connect.status = 'done'
                     connect.dish = dish
+                    dish.quantity -= form.cleaned_data['quantity']
+                    dish.save()
                     connect.save()
                     return redirect('dishes-l')
     else:
