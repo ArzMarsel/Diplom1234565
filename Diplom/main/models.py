@@ -55,8 +55,8 @@ class Connect(models.Model):
 
 
 class Payment(models.Model):
-    card_number = models.CharField('Card number', max_length=16, validators=[MinLengthValidator(16)])
-    cvc = models.CharField('CVC', max_length=3, validators=[MinLengthValidator(3)])
+    card_number = models.IntegerField('Card number', validators=[MinLengthValidator(16)], max_length=16)
+    cvc = models.IntegerField('CVC', validators=[MinLengthValidator(3)], max_length=3)
     date = models.DateField('Date', auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments')
     connect = models.ForeignKey(Connect, on_delete=models.CASCADE, related_name='payments', verbose_name='Connect')

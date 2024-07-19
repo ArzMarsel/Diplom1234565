@@ -51,7 +51,7 @@ class UserCreation(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'password1', 'password2', 'captcha']
+        fields = ['username', 'first_name', 'last_name', 'password1', 'password2', ]
 
 
 class LoginForm(forms.Form):
@@ -71,14 +71,33 @@ class LoginForm(forms.Form):
             }
         )
     )
-    captcha = ReCaptchaField()
 
     class Meta:
         model = User
-        fields = ['username', 'password1', 'captcha']
+        fields = ['username', 'password1']
 
 
 class PaymentForm(forms.ModelForm):
+    card_number = forms.IntegerField(
+        validators=[MaxLengthValidator(16), MinLengthValidator(16)],
+
+        widget=forms.NumberInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Номер карты'
+            }
+        )
+    )
+    cvc = forms.IntegerField(
+        validators=[MinLengthValidator(3), MinLengthValidator(3)],
+        widget=forms.NumberInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'CVC'
+            }
+        )
+    )
+
     class Meta:
         model = Payment
         fields = ['card_number', 'cvc']
